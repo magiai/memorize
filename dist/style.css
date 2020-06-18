@@ -17,3 +17,12 @@
 #repeating {
   background-color: #65AFC9;
 }
+
+.delete-icon {
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.correct-answer {
+  color: green !important;
+}

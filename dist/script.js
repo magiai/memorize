@@ -10,7 +10,17 @@ function addWord(word, definition) {
   wordListElement.innerText = word + " - " + definition;
   wordListElement.setAttribute('contenteditable', 'true');
 
+  const deleteItem = document.createElement('span');
+  deleteItem.classList.add('delete-icon')
+  deleteItem.innerHTML = "&cross;"
+  deleteItem.setAttribute('contenteditable', 'false');
+
+  wordListElement.appendChild(deleteItem);
   listContainer.appendChild(wordListElement);
+
+  deleteItem.addEventListener('click', function() {
+    wordListElement.remove();
+  });
 
   wordList.push({
     index: wordList.length,
@@ -18,6 +28,7 @@ function addWord(word, definition) {
     definition: definition,
   })
 
+  //usuwanie
 }
 // ----------------------repetition of words-------------------------------
 const startRepeating = function() {
@@ -28,11 +39,20 @@ const startRepeating = function() {
   const wordOutput = document.createElement('p');
   wordOutput.classList.add('.word-output');
 
+  //check
   const checkButton = document.createElement('button');
   checkButton.classList.add('.check-button');
   checkButton.innerText = "Sprawdź";
   repetitionDisplayer.appendChild(checkButton);
 
+  //feedback for user
+  const correctAnswer = document.createElement('div');
+  correctAnswer.classList.add('.correct-answer');
+  correctAnswer.innerHTML = "Correct answer &check;";
+
+  const wrongAnswer = document.createElement('div');
+  wrongAnswer.classList.add('.wrong-answer');
+  wrongAnswer.innerHTML = "Wrong answer &cross;";
 
   let randomPairNumber = Math.floor(Math.random() * wordList.length);
 
@@ -42,15 +62,21 @@ const startRepeating = function() {
 
     if (randomPairNumber === item.index) {
       wordOutput.innerText = wordList[randomPairNumber].word;
-      repetitionDisplayer.appendChild(wordOutput);
+      repetitionDisplayer.insertBefore(wordOutput, definitionInput);
 
-      const checkDefinition = function() {
-        console.log(definitionInput.value);
-      };
+      // const checkDefinition = function() {
+      checkButton.addEventListener('click', function() {
 
-      checkButton.addEventListener('click', checkDefinition);
+        if (definitionInput.value === wordList[randomPairNumber].definition) {
+          repetitionDisplayer.appendChild(correctAnswer);
+          setTimeout(startRepeating, 5000);
+        } else {
+          console.log('disabled');
+        }
+      });
+
     };
-  }
+  };
 };
 
 // ----------------variables for the first display--------------------
@@ -64,12 +90,12 @@ const wordPresentation = document.createElement('p');
 const definitionPresentation = document.createElement('p');
 
 const startButton = document.querySelector(".start-learning");
-
 // --------------------first set of words----------------------------
 
 const displayWord = function() {
 
   let randomPairNumber = Math.floor(Math.random() * wordList.length);
+  // ----------------------------------------------------------------------
 
   if (previousWords.some(el => el === randomPairNumber)) {
     displayWord();
