@@ -1,0 +1,19 @@
+#learning, #preparation, #repeating {
+  padding: 2rem;
+}
+
+#preparation {
+  background-color: #C997A3;
+}
+
+.list-item, .start-repeating {
+  margin-bottom: 1rem;
+}
+
+#learning {
+  background-color: #E6B8AC;
+}
+
+#repeating {
+  background-color: #65AFC9;
+}

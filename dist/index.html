@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - A Pen by  Dominika</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./script.js"></script>
+
+</head>
+  <body>
+    <section id="preparation">
+      <h1>Add a word</h1>
+      <div class="word-addition">
+        <form id="add-words-form">
+          <label for="addWord">Word</label>
+          <input type="text" id="add-word">
+
+          <label for="addDefinition">Definition of the word</label>
+          <input type="text" id="add-definition">
+
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
+      <h1 id="list-header">List of words</h1>
+      <div class="list-container"></div>
+    </section>
+
+    <section id="learning">
+      <h1>Learn words</h1>
+      <button class="start-learning">Start</button>
+      <div class="word-displayer"></div>
+    </section>
+
+    <section id="repeating">
+      <h1>Repeat words</h1>
+      <button class="start-repeating">Repeat</button>
+      <div class="repetition-displayer">
+        <label for="repeatDefinition">Definicja</label>
+        <input type="text" id="repeat-definition">
+      </div>
+    </section>
+  </body>
+
+</html>
