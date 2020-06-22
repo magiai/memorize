@@ -1,3 +1,15 @@
+// function countDown(fromNumber) {
+//   console.log(fromNumber);
+//
+//   let nextNumber = fromNumber - 1;
+//
+//   if (nextNumber > 0) {
+//     countDown(nextNumber);
+//   }
+//   console.log(fromNumber);
+// }
+// countDown(3);
+
 let wordList = [];
 
 // ----------------------addition of words-------------------------------
@@ -18,6 +30,7 @@ function addWord(word, definition) {
   wordListElement.appendChild(deleteItem);
   listContainer.appendChild(wordListElement);
 
+  //zrobić update listy bez elementu po usunięciu
   deleteItem.addEventListener('click', function() {
     wordListElement.remove();
   });
@@ -26,57 +39,90 @@ function addWord(word, definition) {
     index: wordList.length,
     word: word,
     definition: definition,
-  })
-
-  //usuwanie
+  });
 }
+
+
+const repetitionDisplayer = document.querySelector(".repetition-displayer");
+repetitionDisplayer.style.display = "none";
+const definitionInput = document.querySelector('#repeat-definition');
+
+const wordOutput = document.createElement('p');
+wordOutput.classList.add('.word-output');
+
+//check
+const checkButton = document.createElement('button');
+checkButton.classList.add('.check-button');
+checkButton.innerText = "Sprawdź";
+repetitionDisplayer.appendChild(checkButton);
+
+//feedback for user
+const userFeedback = document.createElement('div');
+
 // ----------------------repetition of words-------------------------------
+
 const startRepeating = function() {
 
-  const repetitionDisplayer = document.querySelector(".repetition-displayer");
-  const definitionInput = document.querySelector('#repeat-definition');
-
-  const wordOutput = document.createElement('p');
-  wordOutput.classList.add('.word-output');
-
-  //check
-  const checkButton = document.createElement('button');
-  checkButton.classList.add('.check-button');
-  checkButton.innerText = "Sprawdź";
-  repetitionDisplayer.appendChild(checkButton);
-
-  //feedback for user
-  const correctAnswer = document.createElement('div');
-  correctAnswer.classList.add('.correct-answer');
-  correctAnswer.innerHTML = "Correct answer &check;";
-
-  const wrongAnswer = document.createElement('div');
-  wrongAnswer.classList.add('.wrong-answer');
-  wrongAnswer.innerHTML = "Wrong answer &cross;";
+  repetitionDisplayer.style.display = "block";
 
   let randomPairNumber = Math.floor(Math.random() * wordList.length);
+  console.log("Random number: " + randomPairNumber);
 
-  for (let i = 0; i < wordList.length; i++) {
+  wordOutput.innerText = wordList[randomPairNumber].word;
+  console.log("Słowo: " + wordList[randomPairNumber].word);
 
-    let item = wordList[i];
+  let checkDefinition = wordList[randomPairNumber].definition;
+  console.log("definicja: " + checkDefinition);
 
-    if (randomPairNumber === item.index) {
-      wordOutput.innerText = wordList[randomPairNumber].word;
-      repetitionDisplayer.insertBefore(wordOutput, definitionInput);
+  repetitionDisplayer.insertBefore(wordOutput, definitionInput);
 
-      // const checkDefinition = function() {
-      checkButton.addEventListener('click', function() {
+  const firstIteration = [];
 
-        if (definitionInput.value === wordList[randomPairNumber].definition) {
-          repetitionDisplayer.appendChild(correctAnswer);
-          setTimeout(startRepeating, 5000);
-        } else {
-          console.log('disabled');
+  definitionInput.addEventListener('change', function() {
+
+    console.log("Change:" + definitionInput.change);
+    console.log("Value:" + definitionInput.value);
+
+    if(definitionInput.value !== '') {
+
+      console.log("Input:" + definitionInput.value);
+
+      //tutaj jest definicja z wcześniejszej tury - trzeba zrobić update
+      console.log("Definicja w inpucie: " + checkDefinition);
+
+      if (definitionInput.value === checkDefinition) {
+
+        // checkButton.addEventListener('click', startRepeating);
+        console.log("dobra pierwsza odpowiedź");
+
+        userFeedback.innerHTML = "Correct answer &check;";
+        repetitionDisplayer.appendChild(userFeedback);
+
+        //delete item from repetition if was dispayed twice
+        if (firstIteration.some(el => el === checkDefinition)) {
+          wordList.splice(wordList[randomPairNumber].index, 1);
+
+          console.log("dobre powtórzone, zawartość tabeli: " + wordList);
+          return;
         }
-      });
 
-    };
-  };
+        firstIteration.push(checkDefinition);
+        definitionInput.value = '';
+        console.log(firstIteration);
+        startRepeating();
+
+      } else {
+        
+        // checkButton.addEventListener('click', startRepeating);
+        userFeedback.innerHTML = "Wrong answer &cross;";
+        repetitionDisplayer.appendChild(userFeedback);
+
+        definitionInput.value = '';
+        console.log('źle');
+        startRepeating();
+      }
+    }
+  });
 };
 
 // ----------------variables for the first display--------------------
